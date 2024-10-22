@@ -23,6 +23,7 @@ public class Robot extends OpMode {
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
+    
     }
 
     @Override
@@ -55,8 +56,7 @@ public class Robot extends OpMode {
         }
 
         // Set motor powers for driving and rotation
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        drive(leftPower,rightPower);
 
         // Telemetry data for debugging
         telemetry.addData("Forward (RT)", forward);
@@ -64,7 +64,15 @@ public class Robot extends OpMode {
         telemetry.addData("Turn", turn);
         telemetry.addData("Left Power", leftPower);
         telemetry.addData("Right Power", rightPower);
-        telemetry.addData("Arm Power", arm.getPower());  // Show arm power in telemetry
+        telemetry.addData("Arm Power", arm.getPower());  
+        // Show power data in telemetry
         telemetry.update();
+    }
+
+    public void drive(double leftPower,double rightPower)
+    {
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+
     }
 }
