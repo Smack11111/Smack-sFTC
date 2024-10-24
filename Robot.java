@@ -65,6 +65,8 @@ public class Robot extends OpMode {
         telemetry.addData("Left Power", leftPower);
         telemetry.addData("Right Power", rightPower);
         telemetry.addData("Arm Power", arm.getPower());  
+        telemetry.addData()
+        
         // Show power data in telemetry
         telemetry.update();
     }
