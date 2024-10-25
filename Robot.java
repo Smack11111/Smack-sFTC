@@ -23,7 +23,8 @@ public class Robot extends OpMode {
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
-    
+        telemetry.addData("Motor Directions", "Left: REVERSE, Right: FORWARD");
+        telemetry.addData("Runtime", runtime.toString());
     }
 
     @Override
@@ -56,25 +57,28 @@ public class Robot extends OpMode {
         }
 
         // Set motor powers for driving and rotation
-        drive(leftPower,rightPower);
+        drive(leftPower, rightPower);
 
         // Telemetry data for debugging
+        telemetry.addData("== Control Inputs ==", "");
         telemetry.addData("Forward (RT)", forward);
         telemetry.addData("Backward (LT)", backward);
-        telemetry.addData("Turn", turn);
-        telemetry.addData("Left Power", leftPower);
-        telemetry.addData("Right Power", rightPower);
-        telemetry.addData("Arm Power", arm.getPower());  
-        telemetry.addData()
+        telemetry.addData("Turn (Stick X)", turn);
         
-        // Show power data in telemetry
+        telemetry.addData("== Motor Powers ==", "");
+        telemetry.addData("Left Power", "%.2f", leftPower);
+        telemetry.addData("Right Power", "%.2f", rightPower);
+        telemetry.addData("Arm Power", "%.2f", arm.getPower());
+
+        telemetry.addData("== Robot Status ==", "");
+        telemetry.addData("Runtime", "%.1f seconds", runtime.seconds());
+        telemetry.addData("Arm Position", arm.getCurrentPosition());
+
         telemetry.update();
     }
 
-    public void drive(double leftPower,double rightPower)
-    {
+    public void drive(double leftPower, double rightPower) {
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
-
     }
 }
