@@ -24,10 +24,10 @@ public class RobotAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Initialize motors
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFrontDrive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBackDrive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "LFD");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "RFD");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "LBD");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "RBD");
         arm = hardwareMap.get(DcMotor.class, "arm");
 
         // Set motor directions
