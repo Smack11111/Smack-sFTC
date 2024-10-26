@@ -1,4 +1,4 @@
-package org.firstinspires.ftc23565;
+package Random;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

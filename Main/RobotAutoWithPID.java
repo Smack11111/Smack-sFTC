@@ -1,4 +1,4 @@
-package org.firstinspires.ftc23565;
+package Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.apriltag.AprilTagDetectionPipeline;
 import java.util.List;
@@ -17,13 +18,15 @@ public class RobotAutoWithPID extends LinearOpMode {
     private OpenCvCamera camera;
     private AprilTagDetectionPipeline aprilTagDetectionPipeline;
     private VoltageSensor batteryVoltageSensor;
-    
+    private AprilTagDetection tagOfInterest;
+
+    // PID controllers
     private PIDController xPID = new PIDController(0.1, 0, 0);
     private PIDController yPID = new PIDController(0.1, 0, 0);
     private PIDController yawPID = new PIDController(0.05, 0, 0.01);
 
     private static final double FEET_PER_METER = 3.28084;
-    private static final double tagsize = 0.1016;  // Updated: Tag size in meters (4 inches)
+    private static final double tagsize = 0.1016;  // Tag size in meters (4 inches)
     private static final double fx = 578.272;     // Camera focal length x-axis
     private static final double fy = 578.272;     // Camera focal length y-axis
     private static final double cx = 402.145;     // Principal point x
@@ -57,12 +60,26 @@ public class RobotAutoWithPID extends LinearOpMode {
     }
 
     private void initializeCamera() {
+        // Get camera monitor view ID
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        
+        // Create and initialize the webcam
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
-
+        
         camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(() -> camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT));
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened(OpenCvCamera camera) {
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(OpenCvCamera camera, int errorCode) {
+                telemetry.addData("Camera Error", "Error code: " + errorCode);
+                telemetry.update();
+            }
+        });
     }
 
     public void goToPosition(double targetX, double targetY, double targetYaw) {
